@@ -1,13 +1,19 @@
 <script setup lang="ts">
 import Column from "./components/Column.vue";
+import { useBoard } from "./database";
+
+const board = useBoard("1");
 </script>
 
 <template>
   <h1>🚀 quick retro 🚀</h1>
   <main>
-    <Column color="#E82C64" title="Mad" />
-    <Column color="#2C4AC9" title="Sad" />
-    <Column color="#009986" title="Glad" />
+    <Column
+      v-for="column in board.columns"
+      :key="column.id"
+      :title="column.title"
+      :color="column.color"
+    />
   </main>
 </template>
 
