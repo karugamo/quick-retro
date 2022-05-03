@@ -1,24 +1,26 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { reactive } from "vue";
 import Card from "./Card.vue";
 
 const title = "Items";
-const items = ref([{ text: "example" }]);
-const inputText = ref("");
+const state = reactive({
+  items: [{ text: "example" }],
+  inputText: "",
+});
 
 function onAdd(e: Event) {
   e.preventDefault();
-  items.value.push({ text: inputText.value });
-  inputText.value = "";
+  state.items.push({ text: state.inputText });
+  state.inputText = "";
 }
 </script>
 
 <template>
   <h2>{{ title }}</h2>
   <ul>
-    <Card v-for="item in items" :text="item.text" />
+    <Card v-for="item in state.items" :text="item.text" />
   </ul>
   <form target="#" @submit="onAdd">
-    <input v-model="inputText" />
+    <input v-model="state.inputText" />
   </form>
 </template>
