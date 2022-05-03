@@ -2,10 +2,12 @@
 import { provide } from "vue";
 import Column from "./components/Column.vue";
 import { setCardsHidden, useBoard, useUser } from "./database";
+import Spinner from "./components/Spinner.vue";
 
 export interface Board {
   cardsHidden: boolean;
   columns: { [columnId: string]: any };
+  loading: boolean;
 }
 
 const boardId = "-N19He2knvTtxbAGe0_V";
@@ -24,7 +26,7 @@ function toggleCardsHidden() {
 
 <template>
   <h1>🚀 quick retro 🚀</h1>
-  <main>
+  <main v-if="!board.loading">
     <Column
       v-for="(column, columnId) in board.columns"
       :cards="column.cards"
@@ -34,12 +36,15 @@ function toggleCardsHidden() {
       :title="column.title"
       :color="column.color"
     />
+    <section class="options">
+      <button @click="toggleCardsHidden">
+        {{ board.cardsHidden ? "Show all cards" : "Hide other cards" }}
+      </button>
+    </section>
   </main>
-  <section class="options">
-    <button @click="toggleCardsHidden">
-      {{ board.cardsHidden ? "Show all cards" : "Hide other cards" }}
-    </button>
-  </section>
+  <main v-if="board.loading">
+    <Spinner />
+  </main>
 </template>
 
 <style scoped>

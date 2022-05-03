@@ -26,12 +26,13 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
 export function useBoard(id: string) {
-  const board = reactive<{ [key: string]: any }>({});
+  const board = reactive<{ [key: string]: any }>({ loading: true });
 
   onValue(ref(database, `boards/${id}`), (snapshot) => {
     Object.entries(snapshot.val()).forEach(([key, value]) => {
       board[key] = value;
     });
+    board.loading = false;
   });
 
   return board;
