@@ -1,12 +1,21 @@
 <script setup lang="ts">
-import Column from './components/Column.vue'
+import Column from "./components/Column.vue";
 </script>
 
 <template>
-  <Column />
+  <main>
+    <Column />
+  </main>
 </template>
 
 <style>
+main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps<{ text: string }>()
+defineProps<{ text: string }>();
 </script>
 
 <template>
@@ -10,6 +10,9 @@ defineProps<{ text: string }>()
 
 <style scoped>
 li {
-  list-style: none;
+  color: white;
+  border-radius: 4px;
+  padding: 8px;
+  background-color: #009986;
 }
 </style>
