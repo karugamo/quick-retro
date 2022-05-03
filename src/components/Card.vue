@@ -1,14 +1,21 @@
 <script setup lang="ts">
-defineProps<{
+import { inject } from "@vue/runtime-dom";
+
+const { author } = defineProps<{
   text: string;
   color: string;
+  author: string;
   onDelete: (cardId: string) => void;
   id: string;
 }>();
+
+const user = inject("user") as { uid: string };
+
+const isCurrentUser = user.uid === author;
 </script>
 
 <template>
-  <li>
+  <li :class="{ hidden: !isCurrentUser }">
     <button @click="onDelete(id)">✖</button>
     {{ text }}
   </li>
@@ -38,5 +45,10 @@ li {
   padding: 24px;
   background-color: v-bind(color);
   text-align: left;
+}
+
+.hidden {
+  color: transparent;
+  text-shadow: 0 0 8px #fff;
 }
 </style>

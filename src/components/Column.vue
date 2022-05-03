@@ -8,7 +8,7 @@ const { columnId, boardId } = defineProps<{
   color: string;
   boardId: string;
   columnId: string;
-  cards: { [cardId: string]: { text: string } };
+  cards: { [cardId: string]: { text: string, author: string } };
 }>();
 
 const state = reactive({
@@ -41,6 +41,7 @@ function onDelete(cardId: string) {
       <Card
         v-for="(card, cardId) in cards"
         :id="cardId as string"
+        :author="card.author"
         :text="card.text"
         :color="color"
         :onDelete="onDelete"
