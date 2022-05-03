@@ -24,7 +24,6 @@ function toggleCardsHidden() {
 
 <template>
   <h1>🚀 quick retro 🚀</h1>
-
   <main>
     <Column
       v-for="(column, columnId) in board.columns"
@@ -43,7 +42,7 @@ function toggleCardsHidden() {
   </section>
 </template>
 
-<style>
+<style scoped>
 .options {
   position: absolute;
   right: 32px;
@@ -73,14 +72,5 @@ main {
   width: 100%;
   gap: 32px;
   justify-content: center;
-}
-
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
