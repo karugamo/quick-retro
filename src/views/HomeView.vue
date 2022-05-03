@@ -3,10 +3,20 @@
     <Button text="Create New Board" :on-click="createNewBoard" />
     <section>
       <div
+        class="board"
         @click="navigateToBoard(boardId as unknown as string)"
         v-for="(board, boardId) in boards"
       >
-        Board {{ boardId }}
+        <h2>Board</h2>
+        <div class="colunmns">
+          <div
+            class="column"
+            v-for="column in board.columns"
+            v-bind:style="{ backgroundColor: column.color }"
+          >
+            {{ column.title }}
+          </div>
+        </div>
       </div>
     </section>
   </main>
@@ -36,20 +46,43 @@ async function createNewBoard() {
 section {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 24px;
   margin-top: 32px;
+  justify-content: center;
 }
 
-div {
+.board {
   width: 300px;
   height: 200px;
-  border: 2px solid rgb(47, 43, 43);
+  border: 2px solid rgba(47, 43, 43, 0.309);
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   user-select: none;
   border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 8px;
+  padding: 16px;
+  font-weight: bold;
+}
+
+.colunmns {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  flex: 1;
+  width: 100%;
+}
+
+.column {
+  background-color: red;
+  border-radius: 4px;
+  color: white;
+  flex: 1;
+  padding: 8px;
 }
 
 main {
@@ -58,5 +91,9 @@ main {
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
+}
+
+h2 {
+  font-size: 20px;
 }
 </style>
