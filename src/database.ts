@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, onValue, push, ref } from "firebase/database";
+import { getDatabase, onValue, push, ref, remove } from "firebase/database";
 import { reactive } from "vue";
 
 const firebaseConfig = {
@@ -32,4 +32,8 @@ export function useBoard(id: string) {
 export function addCard(boardId: string, columnId: string, text: string) {
   const cards = ref(database, `${boardId}/columns/${columnId}/cards`);
   push(cards, { text });
+}
+
+export function removeCard(boardId: string, columnId: string, cardId: string) {
+  remove(ref(database, `${boardId}/columns/${columnId}/cards/${cardId}`));
 }

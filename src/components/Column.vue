@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { reactive } from "vue";
-import { addCard } from "../database";
+import { addCard, removeCard } from "../database";
 import Card from "./Card.vue";
 
 const { columnId, boardId } = defineProps<{
@@ -21,13 +21,23 @@ function onAdd(e: Event) {
   addCard(boardId, columnId, state.inputText);
   state.inputText = "";
 }
+
+function onDelete(cardId: string) {
+  removeCard(boardId, columnId, cardId);
+}
 </script>
 
 <template>
   <section>
     <h2>{{ title }}</h2>
     <ul>
-      <Card v-for="card in cards" :text="card.text" :color="color" />
+      <Card
+        v-for="(card, cardId) in cards"
+        :id="cardId as string"
+        :text="card.text"
+        :color="color"
+        :onDelete="onDelete"
+      />
     </ul>
     <form target="#" @submit="onAdd">
       <input v-model="state.inputText" />
