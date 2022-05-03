@@ -17,6 +17,7 @@ const state = reactive({
 
 function onAdd(e: Event) {
   e.preventDefault();
+  if (state.inputText.trim() === "") return;
   addCard(boardId, columnId, state.inputText);
   state.inputText = "";
 }
