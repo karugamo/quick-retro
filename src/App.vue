@@ -2,7 +2,9 @@
 import Column from "./components/Column.vue";
 import { useBoard } from "./database";
 
-const board = useBoard("1");
+const boardId = "1";
+
+const board = useBoard(boardId);
 </script>
 
 <template>
@@ -10,6 +12,9 @@ const board = useBoard("1");
   <main>
     <Column
       v-for="column in board.columns"
+      :cards="column.cards"
+      :column-id="column.id"
+      :board-id="boardId"
       :key="column.id"
       :title="column.title"
       :color="column.color"

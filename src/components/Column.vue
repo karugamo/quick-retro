@@ -1,17 +1,23 @@
 <script setup lang="ts">
 import { reactive } from "vue";
+import { addCard } from "../database";
 import Card from "./Card.vue";
 
-defineProps<{ title: string; color: string }>();
+const { columnId, boardId } = defineProps<{
+  title: string;
+  color: string;
+  boardId: string;
+  columnId: string;
+  cards: { [cardId: string]: { text: string } };
+}>();
 
 const state = reactive({
-  items: [] as { text: string }[],
   inputText: "",
 });
 
 function onAdd(e: Event) {
   e.preventDefault();
-  state.items.push({ text: state.inputText });
+  addCard(boardId, columnId, state.inputText);
   state.inputText = "";
 }
 </script>
@@ -20,7 +26,7 @@ function onAdd(e: Event) {
   <section>
     <h2>{{ title }}</h2>
     <ul>
-      <Card v-for="item in state.items" :text="item.text" :color="color" />
+      <Card v-for="card in cards" :text="card.text" :color="color" />
     </ul>
     <form target="#" @submit="onAdd">
       <input v-model="state.inputText" />

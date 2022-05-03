@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, onValue, ref } from "firebase/database";
+import { getDatabase, onValue, push, ref } from "firebase/database";
 import { reactive } from "vue";
 
 const firebaseConfig = {
@@ -20,11 +20,16 @@ const database = getDatabase(app);
 export function useBoard(id: string) {
   const board = reactive<{ [key: string]: any }>({});
 
-  onValue(ref(database), (snapshot) => {
-    Object.entries(snapshot.val()[1]).forEach(([key, value]) => {
+  onValue(ref(database, id), (snapshot) => {
+    Object.entries(snapshot.val()).forEach(([key, value]) => {
       board[key] = value;
     });
   });
 
   return board;
+}
+
+export function addCard(boardId: string, columnId: string, text: string) {
+  const cards = ref(database, `${boardId}/columns/${columnId}/cards`);
+  push(cards, { text });
 }
