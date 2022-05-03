@@ -8,7 +8,7 @@ const { columnId, boardId } = defineProps<{
   color: string;
   boardId: string;
   columnId: string;
-  cards: { [cardId: string]: { text: string, author: string } };
+  cards: { [cardId: string]: { text: string; author: string } };
 }>();
 
 const state = reactive({
@@ -48,7 +48,7 @@ function onDelete(cardId: string) {
       />
     </ul>
     <form target="#" @submit="onAdd">
-      <input v-model="state.inputText" />
+      <input placeholder="Add new card" v-model="state.inputText" />
     </form>
   </section>
 </template>
@@ -79,6 +79,7 @@ input {
   border-radius: 4px;
   padding: 8px;
   width: 100%;
-  box-sizing: border-box; 
+  box-sizing: border-box;
+  font-weight: 500;
 }
 </style>
