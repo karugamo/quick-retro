@@ -1,10 +1,14 @@
 <script setup lang="ts">
+import { provide } from "vue";
 import Column from "./components/Column.vue";
-import { useBoard } from "./database";
+import { useBoard, useUser } from "./database";
 
 const boardId = "1";
 
 const board = useBoard(boardId);
+const user = useUser() as { uid: string };
+
+provide("user", user);
 </script>
 
 <template>

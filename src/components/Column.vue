@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import { inject, reactive } from "vue";
 import { addCard, removeCard } from "../database";
 import Card from "./Card.vue";
 
@@ -15,10 +15,17 @@ const state = reactive({
   inputText: "",
 });
 
+const user = inject<{ uid: string }>("user");
+
 function onAdd(e: Event) {
   e.preventDefault();
   if (state.inputText.trim() === "") return;
-  addCard(boardId, columnId, state.inputText);
+  if (!user?.uid) return;
+
+  addCard(boardId, columnId, {
+    text: state.inputText,
+    author: user.uid,
+  });
   state.inputText = "";
 }
 

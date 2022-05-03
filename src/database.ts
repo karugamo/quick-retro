@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { getAuth, onAuthStateChanged, signInAnonymously } from "firebase/auth";
 import { getDatabase, onValue, push, ref, remove } from "firebase/database";
 import { reactive } from "vue";
 
@@ -29,11 +30,37 @@ export function useBoard(id: string) {
   return board;
 }
 
-export function addCard(boardId: string, columnId: string, text: string) {
+interface CardDb {
+  text: string;
+  author: string;
+}
+
+export function addCard(boardId: string, columnId: string, card: CardDb) {
   const cards = ref(database, `${boardId}/columns/${columnId}/cards`);
-  push(cards, { text });
+  push(cards, card);
 }
 
 export function removeCard(boardId: string, columnId: string, cardId: string) {
   remove(ref(database, `${boardId}/columns/${columnId}/cards/${cardId}`));
+}
+
+export function useUser() {
+  const user = reactive<{ [key: string]: any }>({});
+
+  const auth = getAuth();
+
+  signInAnonymously(auth).catch((error) => {
+    console.error(error);
+  });
+
+  onAuthStateChanged(auth, (firebaseUser) => {
+    console.log("auth status", firebaseUser);
+    if (firebaseUser) {
+      Object.entries(firebaseUser).forEach(([key, value]) => {
+        user[key] = value;
+      });
+    }
+  });
+
+  return user;
 }
