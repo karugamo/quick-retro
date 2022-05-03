@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { provide } from "vue";
 import Column from "./components/Column.vue";
-import { setCardsHidden, useBoard, useUser } from "./database";
 import Spinner from "./components/Spinner.vue";
+import { setCardsHidden, useBoard, useUser } from "./database";
 
 export interface Board {
   cardsHidden: boolean;
@@ -10,7 +10,7 @@ export interface Board {
   loading: boolean;
 }
 
-const boardId = "-N19He2knvTtxbAGe0_V";
+const boardId = window.location.pathname.split("/").pop();
 
 const board = useBoard(boardId) as Board;
 const user = useUser() as { uid: string };
