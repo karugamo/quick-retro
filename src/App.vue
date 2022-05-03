@@ -3,17 +3,25 @@ import Column from "./components/Column.vue";
 </script>
 
 <template>
+  <h1>🚀 quick retro 🚀</h1>
   <main>
-    <Column />
+    <Column title="Mad" />
+    <Column title="Sad" />
+    <Column title="Glad" />
   </main>
 </template>
 
 <style>
+h1 {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 32px;
+}
+
 main {
   display: flex;
-  flex-direction: column;
   width: 100%;
-  align-items: center;
+  justify-content: space-around;
 }
 
 #app {

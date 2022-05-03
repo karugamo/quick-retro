@@ -2,7 +2,8 @@
 import { reactive } from "vue";
 import Card from "./Card.vue";
 
-const title = "Talking Points";
+defineProps<{ title: string }>();
+
 const state = reactive({
   items: [] as { text: string }[],
   inputText: "",
