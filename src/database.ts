@@ -29,10 +29,14 @@ export function useBoard(id: string) {
   const board = reactive<{ [key: string]: any }>({ loading: true });
 
   onValue(ref(database, `boards/${id}`), (snapshot) => {
+    board.exists = snapshot.exists();
+    board.loading = false;
+
+    if (!board.exists) return;
+
     Object.entries(snapshot.val()).forEach(([key, value]) => {
       board[key] = value;
     });
-    board.loading = false;
   });
 
   return board;
