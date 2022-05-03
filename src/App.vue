@@ -8,12 +8,13 @@ export interface Board {
   columns: { [columnId: string]: any };
 }
 
-const boardId = "1";
+const boardId = "-N19He2knvTtxbAGe0_V";
 
 const board = useBoard(boardId) as Board;
 const user = useUser() as { uid: string };
 
 provide("user", user);
+
 provide<Board>("board", board);
 
 function toggleCardsHidden() {
@@ -25,11 +26,11 @@ function toggleCardsHidden() {
   <h1>🚀 quick retro 🚀</h1>
   <main>
     <Column
-      v-for="column in board.columns"
+      v-for="(column, columnId) in board.columns"
       :cards="column.cards"
-      :column-id="column.id"
+      :column-id="String(columnId)"
       :board-id="boardId"
-      :key="column.id"
+      :key="String(columnId)"
       :title="column.title"
       :color="column.color"
     />

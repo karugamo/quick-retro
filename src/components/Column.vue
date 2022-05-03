@@ -79,6 +79,6 @@ input {
   border-radius: 4px;
   padding: 8px;
   width: 100%;
-  box-sizing: border-box;
+  box-sizing: border-box; 
 }
 </style>

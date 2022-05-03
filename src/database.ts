@@ -28,7 +28,7 @@ const database = getDatabase(app);
 export function useBoard(id: string) {
   const board = reactive<{ [key: string]: any }>({});
 
-  onValue(ref(database, id), (snapshot) => {
+  onValue(ref(database, `boards/${id}`), (snapshot) => {
     Object.entries(snapshot.val()).forEach(([key, value]) => {
       board[key] = value;
     });
@@ -43,17 +43,43 @@ interface CardDb {
 }
 
 export function setCardsHidden(boardId: string, hidden: boolean) {
-  const board = ref(database, boardId);
+  const board = ref(database, `boards/${boardId}`);
   update(board, { cardsHidden: hidden });
 }
 
 export function addCard(boardId: string, columnId: string, card: CardDb) {
-  const cards = ref(database, `${boardId}/columns/${columnId}/cards`);
+  const cards = ref(database, `boards/${boardId}/columns/${columnId}/cards`);
   push(cards, card);
 }
 
 export function removeCard(boardId: string, columnId: string, cardId: string) {
-  remove(ref(database, `${boardId}/columns/${columnId}/cards/${cardId}`));
+  remove(
+    ref(database, `boards/${boardId}/columns/${columnId}/cards/${cardId}`)
+  );
+}
+
+export function addNewBoard() {
+  const boards = ref(database, "boards");
+  push(boards, {
+    cardsHidden: true,
+    columns: [
+      {
+        title: "Mad",
+        color: "#f44336",
+        cards: {},
+      },
+      {
+        title: "Sad",
+        color: "#e91e63",
+        cards: {},
+      },
+      {
+        title: "Glad",
+        color: "#9c27b0",
+        cards: {},
+      },
+    ],
+  });
 }
 
 export function useUser() {
@@ -66,7 +92,6 @@ export function useUser() {
   });
 
   onAuthStateChanged(auth, (firebaseUser) => {
-    console.log("auth status", firebaseUser);
     if (firebaseUser) {
       Object.entries(firebaseUser).forEach(([key, value]) => {
         user[key] = value;
