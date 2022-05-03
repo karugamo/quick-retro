@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { inject } from "@vue/runtime-dom";
+import { Board } from "../App.vue";
 
 const { author } = defineProps<{
   text: string;
@@ -12,10 +13,12 @@ const { author } = defineProps<{
 const user = inject("user") as { uid: string };
 
 const isCurrentUser = user.uid === author;
+
+const board = inject("board") as Board;
 </script>
 
 <template>
-  <li :class="{ hidden: !isCurrentUser }">
+  <li :class="{ hidden: !isCurrentUser && board?.cardsHidden }">
     <button @click="onDelete(id)">✖</button>
     {{ text }}
   </li>

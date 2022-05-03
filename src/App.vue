@@ -1,14 +1,24 @@
 <script setup lang="ts">
 import { provide } from "vue";
 import Column from "./components/Column.vue";
-import { useBoard, useUser } from "./database";
+import { setCardsHidden, useBoard, useUser } from "./database";
+
+export interface Board {
+  cardsHidden: boolean;
+  columns: { [columnId: string]: any };
+}
 
 const boardId = "1";
 
-const board = useBoard(boardId);
+const board = useBoard(boardId) as Board;
 const user = useUser() as { uid: string };
 
 provide("user", user);
+provide<Board>("board", board);
+
+function toggleCardsHidden() {
+  setCardsHidden(boardId, !board.cardsHidden);
+}
 </script>
 
 <template>
@@ -24,6 +34,9 @@ provide("user", user);
       :color="column.color"
     />
   </main>
+  <button @click="toggleCardsHidden">
+    {{ board.cardsHidden ? "show" : "hide" }}
+  </button>
 </template>
 
 <style>

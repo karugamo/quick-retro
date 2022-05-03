@@ -1,6 +1,13 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, signInAnonymously } from "firebase/auth";
-import { getDatabase, onValue, push, ref, remove } from "firebase/database";
+import {
+  getDatabase,
+  onValue,
+  push,
+  ref,
+  remove,
+  update,
+} from "firebase/database";
 import { reactive } from "vue";
 
 const firebaseConfig = {
@@ -33,6 +40,11 @@ export function useBoard(id: string) {
 interface CardDb {
   text: string;
   author: string;
+}
+
+export function setCardsHidden(boardId: string, hidden: boolean) {
+  const board = ref(database, boardId);
+  update(board, { cardsHidden: hidden });
 }
 
 export function addCard(boardId: string, columnId: string, card: CardDb) {
