@@ -24,6 +24,7 @@ function toggleCardsHidden() {
 
 <template>
   <h1>🚀 quick retro 🚀</h1>
+
   <main>
     <Column
       v-for="(column, columnId) in board.columns"
@@ -35,12 +36,32 @@ function toggleCardsHidden() {
       :color="column.color"
     />
   </main>
-  <button @click="toggleCardsHidden">
-    {{ board.cardsHidden ? "show" : "hide" }}
-  </button>
+  <section class="options">
+    <button @click="toggleCardsHidden">
+      {{ board.cardsHidden ? "Show all cards" : "Hide other cards" }}
+    </button>
+  </section>
 </template>
 
 <style>
+.options {
+  position: absolute;
+  right: 32px;
+  bottom: 32px;
+}
+
+button {
+  width: 200px;
+  border: 2px solid rgb(47, 43, 43);
+  color: rgb(47, 43, 43);
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 8px 16px;
+  text-transform: uppercase;
+  font-weight: bold;
+  background-color: transparent;
+}
+
 h1 {
   font-size: 32px;
   font-weight: bold;
