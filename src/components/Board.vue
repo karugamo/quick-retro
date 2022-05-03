@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject } from "vue";
+import { inject, computed } from "vue";
 import Column from "./Column.vue";
 import { setCardsHidden } from "../database";
 import Button from "./Button.vue";
@@ -17,9 +17,9 @@ function toggleCardsHidden() {
   setCardsHidden(boardId, !board.cardsHidden);
 }
 
-const toggleHiddenButtonText = board.cardsHidden
-  ? "Show all cards"
-  : "Hide other cards";
+function getToggleText() {
+  return board.cardsHidden ? "Show all cards" : "Hide other cards";
+}
 </script>
 
 <template>
@@ -33,7 +33,7 @@ const toggleHiddenButtonText = board.cardsHidden
     :color="column.color"
   />
   <section class="options">
-    <Button :on-click="toggleCardsHidden" :text="toggleHiddenButtonText" />
+    <Button :on-click="toggleCardsHidden" :text="getToggleText()" />
   </section>
 </template>
 
