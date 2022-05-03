@@ -40,8 +40,8 @@ section {
 ul {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  margin-bottom: 8px;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 
 form {

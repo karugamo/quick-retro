@@ -11,8 +11,10 @@ defineProps<{ text: string }>();
 <style scoped>
 li {
   color: white;
+  font-weight: 500;
   border-radius: 4px;
-  padding: 8px;
+  padding: 24px;
   background-color: #009986;
+  text-align: left;
 }
 </style>
