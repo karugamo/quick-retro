@@ -8,7 +8,7 @@
 const { text, onClick } = defineProps<{ text: string; onClick: () => void }>();
 </script>
 
-<style>
+<style scoped>
 button {
   width: 200px;
   border: 2px solid rgb(47, 43, 43);
