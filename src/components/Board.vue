@@ -2,6 +2,7 @@
 import { inject } from "vue";
 import Column from "./Column.vue";
 import { setCardsHidden } from "../database";
+import Button from "./Button.vue";
 
 export interface Board {
   cardsHidden: boolean;
@@ -10,17 +11,21 @@ export interface Board {
 }
 
 const board = inject("board") as Board;
-const boardId = inject("boardID") as string;
+const boardId = inject("boardId") as string;
 
 function toggleCardsHidden() {
   setCardsHidden(boardId, !board.cardsHidden);
 }
+
+const toggleHiddenButtonText = board.cardsHidden
+  ? "Show all cards"
+  : "Hide other cards";
 </script>
 
 <template>
   <Column
     v-for="(column, columnId) in board.columns"
-    :cards="column.cards"
+    :cards="column.cards ?? []"
     :column-id="String(columnId)"
     :board-id="boardId"
     :key="String(columnId)"
@@ -28,9 +33,7 @@ function toggleCardsHidden() {
     :color="column.color"
   />
   <section class="options">
-    <button @click="toggleCardsHidden">
-      {{ board.cardsHidden ? "Show all cards" : "Hide other cards" }}
-    </button>
+    <Button :on-click="toggleCardsHidden" :text="toggleHiddenButtonText" />
   </section>
 </template>
 
@@ -39,17 +42,5 @@ function toggleCardsHidden() {
   position: absolute;
   right: 32px;
   bottom: 32px;
-}
-
-button {
-  width: 200px;
-  border: 2px solid rgb(47, 43, 43);
-  color: rgb(47, 43, 43);
-  border-radius: 6px;
-  cursor: pointer;
-  padding: 8px 16px;
-  text-transform: uppercase;
-  font-weight: bold;
-  background-color: transparent;
 }
 </style>

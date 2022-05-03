@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import BoardView from "./views/BoardView.vue";
+import HomeView from "./views/HomeView.vue";
 
 export interface Board {
   cardsHidden: boolean;
@@ -8,12 +10,18 @@ export interface Board {
   exists: boolean;
 }
 
-const boardId = window.location.pathname.split("/").pop() as string;
+const boardId = ref(window.location.pathname.split("/").pop());
+
+function navigateToNewBoard(newBoardId: string) {
+  history.pushState({}, "", `/quick-retro/${newBoardId}`);
+  boardId.value = newBoardId;
+}
 </script>
 
 <template>
   <h1>🚀 quick retro 🚀</h1>
-  <BoardView :boardId="boardId" v-if="boardId.length > 0" />
+  <BoardView :boardId="boardId" v-if="boardId && boardId.length > 0" />
+  <HomeView v-else :on-new-board="navigateToNewBoard" />
 </template>
 
 <style>
