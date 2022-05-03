@@ -12,7 +12,7 @@ export interface Board {
 
 const boardId = ref(window.location.pathname.split("/").pop());
 
-function navigateToNewBoard(newBoardId: string) {
+function navigateToBoard(newBoardId: string) {
   history.pushState({}, "", `/quick-retro/${newBoardId}`);
   boardId.value = newBoardId;
 }
@@ -21,7 +21,7 @@ function navigateToNewBoard(newBoardId: string) {
 <template>
   <h1>🚀 quick retro 🚀</h1>
   <BoardView :boardId="boardId" v-if="boardId && boardId.length > 0" />
-  <HomeView v-else :on-new-board="navigateToNewBoard" />
+  <HomeView v-else :navigate-to-board="navigateToBoard" />
 </template>
 
 <style>

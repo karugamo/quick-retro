@@ -2,7 +2,12 @@
   <main>
     <Button text="Create New Board" :on-click="createNewBoard" />
     <section>
-      <div v-for="(board, boardId) in boards">Board {{ boardId }}</div>
+      <div
+        @click="navigateToBoard(boardId as unknown as string)"
+        v-for="(board, boardId) in boards"
+      >
+        Board {{ boardId }}
+      </div>
     </section>
   </main>
 </template>
@@ -11,13 +16,19 @@
 import Button from "../components/Button.vue";
 import { addNewBoard, useBoards } from "../database";
 
-const { onNewBoard } = defineProps<{ onNewBoard: (boardId: string) => void }>();
+const { navigateToBoard } = defineProps<{
+  navigateToBoard: (boardId: string) => void;
+}>();
 
 const boards = useBoards();
 
+function goToBoard(boardId: string) {
+  navigateToBoard(boardId);
+}
+
 async function createNewBoard() {
   const boardId = await addNewBoard();
-  if (boardId) onNewBoard(boardId);
+  if (boardId) navigateToBoard(boardId);
 }
 </script>
 
