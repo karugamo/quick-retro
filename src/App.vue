@@ -5,9 +5,9 @@ import Column from "./components/Column.vue";
 <template>
   <h1>🚀 quick retro 🚀</h1>
   <main>
-    <Column title="Mad" />
-    <Column title="Sad" />
-    <Column title="Glad" />
+    <Column color="#E82C64" title="Mad" />
+    <Column color="#2C4AC9" title="Sad" />
+    <Column color="#009986" title="Glad" />
   </main>
 </template>
 
@@ -21,7 +21,8 @@ h1 {
 main {
   display: flex;
   width: 100%;
-  justify-content: space-around;
+  gap: 32px;
+  justify-content: center;
 }
 
 #app {

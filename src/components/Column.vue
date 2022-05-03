@@ -2,7 +2,7 @@
 import { reactive } from "vue";
 import Card from "./Card.vue";
 
-defineProps<{ title: string }>();
+defineProps<{ title: string; color: string }>();
 
 const state = reactive({
   items: [] as { text: string }[],
@@ -20,7 +20,7 @@ function onAdd(e: Event) {
   <section>
     <h2>{{ title }}</h2>
     <ul>
-      <Card v-for="item in state.items" :text="item.text" />
+      <Card v-for="item in state.items" :text="item.text" :color="color" />
     </ul>
     <form target="#" @submit="onAdd">
       <input v-model="state.inputText" />
@@ -50,7 +50,7 @@ form {
 }
 
 input {
-  border: 2px solid #009a85;
+  border: 2px solid v-bind(color);
   border-radius: 4px;
   padding: 8px;
   width: 100%;

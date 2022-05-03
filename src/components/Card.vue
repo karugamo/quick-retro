@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps<{ text: string }>();
+defineProps<{ text: string; color: string }>();
 </script>
 
 <template>
@@ -14,7 +14,7 @@ li {
   font-weight: 500;
   border-radius: 4px;
   padding: 24px;
-  background-color: #009986;
+  background-color: v-bind(color);
   text-align: left;
 }
 </style>
