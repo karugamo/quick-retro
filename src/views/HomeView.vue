@@ -1,12 +1,40 @@
 <template>
   <main>
     <h1>🚀 quick retro 🚀</h1>
-    <Button text="Create New Board" :on-click="createNewBoard" />
+    <h2>start a new board</h2>
     <section>
-      <div class="board" @click="navigateToBoard(boardId as unknown as string)" v-for="(board, boardId) in ownBoards">
-        <h2>{{ board.title || "Untitled Retro" }}</h2>
+      <div
+        class="board template"
+        v-for="template in templates"
+        @click="createNewBoard(template)"
+      >
+        <h3>{{ template.title }}</h3>
         <div class="columns">
-          <div class="column" v-for="column in board.columns" v-bind:style="{ backgroundColor: column.color }">
+          <div
+            class="column"
+            v-for="column in template.columns"
+            v-bind:style="{ backgroundColor: column.color }"
+            :title="column.title"
+          >
+            {{ column.title }}
+          </div>
+        </div>
+      </div>
+    </section>
+    <h2>your boards</h2>
+    <section>
+      <div
+        class="board"
+        @click="navigateToBoard(boardId as unknown as string)"
+        v-for="(board, boardId) in ownBoards"
+      >
+        <h3>{{ board.title || "Untitled Retro" }}</h3>
+        <div class="columns">
+          <div
+            class="column"
+            v-for="column in board.columns"
+            v-bind:style="{ backgroundColor: column.color }"
+          >
             {{ column.title }}
           </div>
         </div>
@@ -18,20 +46,24 @@
 <script setup lang="ts">
 import { computed, inject } from "vue";
 import { Board } from "../App.vue";
-import Button from "../components/Button.vue";
 import { addNewBoard, useBoards } from "../database";
+import { Template, templates } from "../templates";
 
 const { navigateToBoard } = defineProps<{
   navigateToBoard: (boardId: string) => void;
 }>();
 
 const boards = useBoards() as { [boardId: string]: Board };
-const user = inject('user') as { uid: string };
-const ownBoards = computed(() => Object.fromEntries(Object.entries(boards).filter(([_, board]) => board.author === user?.uid)));
+const user = inject("user") as { uid: string };
+const ownBoards = computed(() =>
+  Object.fromEntries(
+    Object.entries(boards).filter(([_, board]) => board.author === user?.uid)
+  )
+);
 
-async function createNewBoard() {
+async function createNewBoard(template: Template) {
   if (!user?.uid) return;
-  const boardId = await addNewBoard(user.uid);
+  const boardId = await addNewBoard(user.uid, template);
   if (boardId) navigateToBoard(boardId);
 }
 </script>
@@ -77,6 +109,10 @@ section {
   color: white;
   flex: 1;
   padding: 8px;
+  min-width: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 main {
@@ -93,7 +129,17 @@ h1 {
   margin-bottom: 32px;
 }
 
-h2 {
+h3 {
   font-size: 20px;
+}
+
+h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: 32px;
+}
+
+.template {
+  border-style: dashed;
 }
 </style>
