@@ -1,3 +1,8 @@
+<template>
+  <BoardView :boardId="boardId" v-if="boardId && boardId.length > 0" />
+  <HomeView v-else :navigate-to-board="navigateToBoard" />
+</template>
+
 <script setup lang="ts">
 import { provide, ref } from "vue";
 import { useUser } from "./database";
@@ -29,16 +34,3 @@ const user = useUser() as { uid: string };
 provide("user", user);
 </script>
 
-<template>
-  <h1>🚀 quick retro 🚀</h1>
-  <BoardView :boardId="boardId" v-if="boardId && boardId.length > 0" />
-  <HomeView v-else :navigate-to-board="navigateToBoard" />
-</template>
-
-<style>
-h1 {
-  font-size: 32px;
-  font-weight: bold;
-  margin-bottom: 32px;
-}
-</style>

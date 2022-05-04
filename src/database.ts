@@ -1,5 +1,5 @@
-import { initializeApp } from "firebase/app";
-import { getAuth, onAuthStateChanged, signInAnonymously } from "firebase/auth";
+import { initializeApp } from 'firebase/app';
+import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth';
 import {
   getDatabase,
   onValue,
@@ -7,18 +7,18 @@ import {
   ref,
   remove,
   update,
-} from "firebase/database";
-import { reactive } from "vue";
+} from 'firebase/database';
+import { reactive } from 'vue';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAsXHXd9Spu67AO6DV06x2E_EnVOIAu9UU",
-  authDomain: "quick-retro.firebaseapp.com",
-  projectId: "quick-retro",
-  storageBucket: "quick-retro.appspot.com",
-  messagingSenderId: "293134428599",
-  appId: "1:293134428599:web:bad71d4fedbda8080ce032",
+  apiKey: 'AIzaSyAsXHXd9Spu67AO6DV06x2E_EnVOIAu9UU',
+  authDomain: 'quick-retro.firebaseapp.com',
+  projectId: 'quick-retro',
+  storageBucket: 'quick-retro.appspot.com',
+  messagingSenderId: '293134428599',
+  appId: '1:293134428599:web:bad71d4fedbda8080ce032',
   databaseURL:
-    "https://quick-retro-default-rtdb.europe-west1.firebasedatabase.app",
+    'https://quick-retro-default-rtdb.europe-west1.firebasedatabase.app',
 };
 
 const app = initializeApp(firebaseConfig);
@@ -76,24 +76,25 @@ export function removeCard(boardId: string, columnId: string, cardId: string) {
 }
 
 export async function addNewBoard(author: string) {
-  const boards = ref(database, "boards");
+  const boards = ref(database, 'boards');
   const newBoard = await push(boards, {
     author,
     cardsHidden: true,
+    title: 'Untitled Retro',
     columns: [
       {
-        title: "Mad",
-        color: "#f44336",
+        title: 'Mad',
+        color: '#f44336',
         cards: {},
       },
       {
-        title: "Sad",
-        color: "#e91e63",
+        title: 'Sad',
+        color: '#e91e63',
         cards: {},
       },
       {
-        title: "Glad",
-        color: "#9c27b0",
+        title: 'Glad',
+        color: '#9c27b0',
         cards: {},
       },
     ],

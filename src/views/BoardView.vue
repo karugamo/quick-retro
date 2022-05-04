@@ -33,7 +33,5 @@ provide<BoardType>("board", board);
 main {
   display: flex;
   width: 100%;
-  gap: 32px;
-  justify-content: center;
 }
 </style>

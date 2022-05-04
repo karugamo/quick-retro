@@ -1,5 +1,6 @@
 <template>
   <main>
+    <h1>🚀 quick retro 🚀</h1>
     <Button text="Create New Board" :on-click="createNewBoard" />
     <section>
       <div class="board" @click="navigateToBoard(boardId as unknown as string)" v-for="(board, boardId) in ownBoards">
@@ -84,6 +85,12 @@ main {
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
+}
+
+h1 {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 32px;
 }
 
 h2 {
