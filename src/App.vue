@@ -9,17 +9,16 @@ import { useUser } from "./database";
 import BoardView from "./views/BoardView.vue";
 import HomeView from "./views/HomeView.vue";
 
-
-
 const boardId = ref(window.location.hash.slice(1));
-console.log(window.location.hash);
 
 function navigateToBoard(newBoardId: string) {
+  console.log("navigating to board", newBoardId);
   history.pushState({}, "", `#${newBoardId}`);
   boardId.value = newBoardId;
 }
 
 addEventListener("popstate", () => {
+  console.log(window.location.hash.slice(1));
   boardId.value = window.location.hash.slice(1);
 });
 

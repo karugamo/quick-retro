@@ -1,5 +1,5 @@
 <template>
-  <div class="board" :class="{template: isTemplate}" @click="$emit('click')">
+  <div class="board" :class="{template: isTemplate}">
     <h3>{{ board.title || "Untitled Retro" }}</h3>
     <div class="columns">
       <div
