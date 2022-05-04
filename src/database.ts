@@ -85,7 +85,7 @@ export async function addNewBoard(author: string) {
   const newBoard = await push(boards, {
     author,
     cardsHidden: true,
-    title: 'Untitled Retro',
+    title: '',
     columns: [
       {
         title: 'Mad',

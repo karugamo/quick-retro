@@ -11,6 +11,7 @@ import HomeView from "./views/HomeView.vue";
 
 export interface Board {
   author: string
+  title: string
   cardsHidden: boolean;
   columns: { [columnId: string]: any };
   loading: boolean;

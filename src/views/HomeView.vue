@@ -4,7 +4,7 @@
     <Button text="Create New Board" :on-click="createNewBoard" />
     <section>
       <div class="board" @click="navigateToBoard(boardId as unknown as string)" v-for="(board, boardId) in ownBoards">
-        <h2>Board</h2>
+        <h2>{{ board.title || "Untitled Retro" }}</h2>
         <div class="columns">
           <div class="column" v-for="column in board.columns" v-bind:style="{ backgroundColor: column.color }">
             {{ column.title }}
@@ -19,7 +19,7 @@
 import { computed, inject } from "vue";
 import { Board } from "../App.vue";
 import Button from "../components/Button.vue";
-import { addNewBoard, useBoards, useUser } from "../database";
+import { addNewBoard, useBoards } from "../database";
 
 const { navigateToBoard } = defineProps<{
   navigateToBoard: (boardId: string) => void;
