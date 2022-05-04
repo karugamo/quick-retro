@@ -16,6 +16,11 @@ function navigateToBoard(newBoardId: string) {
   history.pushState({}, "", `/quick-retro/${newBoardId}`);
   boardId.value = newBoardId;
 }
+
+addEventListener("popstate", () => {
+  boardId.value = window.location.pathname.split("/").pop();
+});
+
 </script>
 
 <template>
