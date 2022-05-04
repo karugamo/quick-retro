@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { inject } from "@vue/runtime-dom";
-import { Board } from "../App.vue";
+import BoardData from "../types";
 
 const { author } = defineProps<{
   text: string;
@@ -14,7 +14,7 @@ const user = inject("user") as { uid: string };
 
 const isCurrentUser = user.uid === author;
 
-const board = inject("board") as Board;
+const board = inject("board") as BoardData;
 </script>
 
 <template>

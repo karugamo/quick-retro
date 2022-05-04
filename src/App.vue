@@ -9,14 +9,7 @@ import { useUser } from "./database";
 import BoardView from "./views/BoardView.vue";
 import HomeView from "./views/HomeView.vue";
 
-export interface Board {
-  author: string;
-  title: string;
-  cardsHidden: boolean;
-  columns: { [columnId: string]: any };
-  loading: boolean;
-  exists: boolean;
-}
+
 
 const boardId = ref(window.location.hash.slice(1));
 console.log(window.location.hash);

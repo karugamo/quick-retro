@@ -47,15 +47,15 @@
 
 <script setup lang="ts">
 import { computed, inject } from "vue";
-import { Board } from "../App.vue";
 import { addNewBoard, useBoards } from "../database";
 import { Template, templates } from "../templates";
+import BoardData from "../types";
 
 const { navigateToBoard } = defineProps<{
   navigateToBoard: (boardId: string) => void;
 }>();
 
-const boards = useBoards() as { [boardId: string]: Board };
+const boards = useBoards() as { [boardId: string]: BoardData };
 const user = inject("user") as { uid: string };
 const ownBoards = computed(() =>
   Object.fromEntries(

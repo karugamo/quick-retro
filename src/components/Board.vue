@@ -1,17 +1,11 @@
 <script setup lang="ts">
 import { inject, ref } from "vue";
 import { changeBoardTitle, setCardsHidden } from "../database";
+import BoardData from "../types";
 import Button from "./Button.vue";
 import Column from "./Column.vue";
 
-export interface Board {
-  title: string;
-  cardsHidden: boolean;
-  columns: { [columnId: string]: any };
-  loading: boolean;
-}
-
-const board = inject("board") as Board;
+const board = inject("board") as BoardData;
 const boardId = inject("boardId") as string;
 
 function toggleCardsHidden() {

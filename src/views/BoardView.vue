@@ -3,20 +3,14 @@ import { provide } from "vue";
 import Board from "../components/Board.vue";
 import Spinner from "../components/Spinner.vue";
 import { useBoard } from "../database";
-
-interface BoardType {
-  cardsHidden: boolean;
-  columns: { [columnId: string]: any };
-  loading: boolean;
-  exists: boolean;
-}
+import BoardData from "../types";
 
 const { boardId } = defineProps<{ boardId: string }>()
 
-const board = useBoard(boardId) as BoardType;
+const board = useBoard(boardId) as BoardData;
 
 provide("boardId", boardId);
-provide<BoardType>("board", board);
+provide<BoardData>("board", board);
 </script>
 
 <template>
