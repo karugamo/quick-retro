@@ -75,7 +75,7 @@ input {
 }
 
 .untitled {
-  color: grey;
+  color: #777777cb;
 }
 
 .columns {
