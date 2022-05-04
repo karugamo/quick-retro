@@ -27,5 +27,7 @@ provide<BoardData>("board", board);
 main {
   display: flex;
   width: 100%;
+  padding: 32px;
+  box-sizing: border-box;
 }
 </style>
