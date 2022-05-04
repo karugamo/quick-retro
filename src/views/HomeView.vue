@@ -1,46 +1,48 @@
 <template>
-  <main>
-    <h1>🚀 quick retro 🚀</h1>
-    <h2>start a new board</h2>
-    <section>
-      <div
-        class="board template"
-        v-for="template in templates"
-        @click="createNewBoard(template)"
-      >
-        <h3>{{ template.title }}</h3>
-        <div class="columns">
-          <div
-            class="column"
-            v-for="column in template.columns"
-            v-bind:style="{ backgroundColor: column.color }"
-            :title="column.title"
-          >
-            {{ column.title }}
+  <div class="container">
+    <main>
+      <h1>🚀 quick retro 🚀</h1>
+      <h2>start a new board</h2>
+      <section>
+        <div
+          class="board template"
+          v-for="template in templates"
+          @click="createNewBoard(template)"
+        >
+          <h3>{{ template.title }}</h3>
+          <div class="columns">
+            <div
+              class="column"
+              v-for="column in template.columns"
+              v-bind:style="{ backgroundColor: column.color }"
+              :title="column.title"
+            >
+              {{ column.title }}
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-    <h2>your boards</h2>
-    <section>
-      <div
-        class="board"
-        @click="navigateToBoard(boardId as unknown as string)"
-        v-for="(board, boardId) in ownBoards"
-      >
-        <h3>{{ board.title || "Untitled Retro" }}</h3>
-        <div class="columns">
-          <div
-            class="column"
-            v-for="column in board.columns"
-            v-bind:style="{ backgroundColor: column.color }"
-          >
-            {{ column.title }}
+      </section>
+      <h2>your boards</h2>
+      <section>
+        <div
+          class="board"
+          @click="navigateToBoard(boardId as unknown as string)"
+          v-for="(board, boardId) in ownBoards"
+        >
+          <h3>{{ board.title || "Untitled Retro" }}</h3>
+          <div class="columns">
+            <div
+              class="column"
+              v-for="column in board.columns"
+              v-bind:style="{ backgroundColor: column.color }"
+            >
+              {{ column.title }}
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-  </main>
+      </section>
+    </main>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -69,12 +71,21 @@ async function createNewBoard(template: Template) {
 </script>
 
 <style scoped>
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+main {
+  max-width: 1200px;
+}
+
 section {
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
   margin-top: 32px;
-  justify-content: center;
 }
 
 .board {
@@ -93,6 +104,12 @@ section {
   gap: 16px;
   padding: 16px;
   font-weight: bold;
+  transition: all 0.2s ease-in-out;
+}
+
+.board:hover {
+  box-shadow: 0 0 8px rgba(47, 43, 43, 0.115);
+  transform: scale(1.05);
 }
 
 .columns {

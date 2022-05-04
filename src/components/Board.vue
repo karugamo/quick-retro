@@ -77,6 +77,7 @@ input {
   outline: none;
   text-align: center;
   border: 0;
+  background-color: transparent;
 }
 
 .untitled {
