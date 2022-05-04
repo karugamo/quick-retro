@@ -64,6 +64,11 @@ export function setCardsHidden(boardId: string, hidden: boolean) {
   update(board, { cardsHidden: hidden });
 }
 
+export function changeBoardTitle(boardId: string, title: string) {
+  const board = ref(database, `boards/${boardId}`);
+  update(board, { title });
+}
+
 export function addCard(boardId: string, columnId: string, card: CardDb) {
   const cards = ref(database, `boards/${boardId}/columns/${columnId}/cards`);
   push(cards, card);

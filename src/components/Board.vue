@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { inject, computed } from "vue";
 import Column from "./Column.vue";
-import { setCardsHidden } from "../database";
+import { changeBoardTitle, setCardsHidden } from "../database";
 import Button from "./Button.vue";
 
 export interface Board {
@@ -21,11 +21,15 @@ function toggleCardsHidden() {
 function getToggleText() {
   return board.cardsHidden ? "Show all cards" : "Hide other cards";
 }
+
+function onTitleChange(e: Event) {
+  changeBoardTitle(boardId, (e?.target as HTMLElement).innerText)
+}
 </script>
 
 <template>
   <div class="board">
-    <h2>{{ board.title }}</h2>
+    <h2 contenteditable @input="onTitleChange">{{ board.title }}</h2>
     <section class="columns">
       <Column v-for="(column, columnId) in board.columns" :cards="column.cards ?? []" :column-id="String(columnId)"
         :board-id="boardId" :key="String(columnId)" :title="column.title" :color="column.color" />
