@@ -2,7 +2,7 @@
 import { provide } from "vue";
 import Board from "../components/Board.vue";
 import Spinner from "../components/Spinner.vue";
-import { useBoard, useUser } from "../database";
+import { useBoard } from "../database";
 
 interface BoardType {
   cardsHidden: boolean;
@@ -11,12 +11,9 @@ interface BoardType {
   exists: boolean;
 }
 
-const {boardId} = defineProps<{boardId: string}>()
+const { boardId } = defineProps<{ boardId: string }>()
 
 const board = useBoard(boardId) as BoardType;
-const user = useUser() as { uid: string };
-
-provide("user", user);
 
 provide("boardId", boardId);
 provide<BoardType>("board", board);
@@ -32,7 +29,7 @@ provide<BoardType>("board", board);
   </main>
 </template>
 
-<style>
+<style scoped>
 main {
   display: flex;
   width: 100%;

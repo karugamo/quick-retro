@@ -75,9 +75,10 @@ export function removeCard(boardId: string, columnId: string, cardId: string) {
   );
 }
 
-export async function addNewBoard() {
+export async function addNewBoard(author: string) {
   const boards = ref(database, "boards");
   const newBoard = await push(boards, {
+    author,
     cardsHidden: true,
     columns: [
       {

@@ -2,18 +2,10 @@
   <main>
     <Button text="Create New Board" :on-click="createNewBoard" />
     <section>
-      <div
-        class="board"
-        @click="navigateToBoard(boardId as unknown as string)"
-        v-for="(board, boardId) in boards"
-      >
+      <div class="board" @click="navigateToBoard(boardId as unknown as string)" v-for="(board, boardId) in ownBoards">
         <h2>Board</h2>
-        <div class="colunmns">
-          <div
-            class="column"
-            v-for="column in board.columns"
-            v-bind:style="{ backgroundColor: column.color }"
-          >
+        <div class="columns">
+          <div class="column" v-for="column in board.columns" v-bind:style="{ backgroundColor: column.color }">
             {{ column.title }}
           </div>
         </div>
@@ -23,21 +15,22 @@
 </template>
 
 <script setup lang="ts">
+import { computed, inject } from "vue";
+import { Board } from "../App.vue";
 import Button from "../components/Button.vue";
-import { addNewBoard, useBoards } from "../database";
+import { addNewBoard, useBoards, useUser } from "../database";
 
 const { navigateToBoard } = defineProps<{
   navigateToBoard: (boardId: string) => void;
 }>();
 
-const boards = useBoards();
-
-function goToBoard(boardId: string) {
-  navigateToBoard(boardId);
-}
+const boards = useBoards() as { [boardId: string]: Board };
+const user = inject('user') as { uid: string };
+const ownBoards = computed(() => Object.fromEntries(Object.entries(boards).filter(([_, board]) => board.author === user?.uid)));
 
 async function createNewBoard() {
-  const boardId = await addNewBoard();
+  if (!user?.uid) return;
+  const boardId = await addNewBoard(user.uid);
   if (boardId) navigateToBoard(boardId);
 }
 </script>
@@ -69,7 +62,7 @@ section {
   font-weight: bold;
 }
 
-.colunmns {
+.columns {
   display: flex;
   flex-direction: row;
   gap: 4px;

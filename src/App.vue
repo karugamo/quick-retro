@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { provide, ref } from "vue";
+import { useUser } from "./database";
 import BoardView from "./views/BoardView.vue";
 import HomeView from "./views/HomeView.vue";
 
 export interface Board {
+  author: string
   cardsHidden: boolean;
   columns: { [columnId: string]: any };
   loading: boolean;
@@ -21,6 +23,10 @@ addEventListener("popstate", () => {
   boardId.value = window.location.pathname.split("/").pop();
 });
 
+
+const user = useUser() as { uid: string };
+
+provide("user", user);
 </script>
 
 <template>
