@@ -4,6 +4,7 @@ import {
   connectDatabaseEmulator,
   DataSnapshot,
   get,
+  set,
   getDatabase,
   onValue,
   push,
@@ -62,6 +63,8 @@ export function useBoards(userId: string | undefined) {
 
       boardListeners[boardId]();
       delete boardListeners[boardId];
+      console.log('delete', boardId)
+      delete boards[boardId];
     }
   }
 
@@ -143,6 +146,17 @@ export async function addNewBoard(authorId: string, template: Template) {
   await joinBoard(authorId, newBoard.key);
 
   return newBoard.key;
+}
+
+export async function leaveBoard(userId: string, boardId: string) {
+  const userBoards = ref(database, `users/${userId}/boards`);
+  const userBoardsSnapshot = await get(userBoards);
+
+  if (!userBoardsSnapshot.exists()) return
+
+  const boardsWithoutLeavingBoard = Object.fromEntries(Object.entries(userBoardsSnapshot.val()).filter(([key, aBoardId]) => boardId !== aBoardId))
+
+  await set(userBoards, boardsWithoutLeavingBoard);
 }
 
 export async function joinBoard(userId: string, boardId: string) {

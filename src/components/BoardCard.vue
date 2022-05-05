@@ -1,5 +1,6 @@
 <template>
-  <div class="board" :class="{template: isTemplate}">
+  <div class="board" :class="{ template: isTemplate }">
+    <DeleteButton color="black" @click="onDelete">✖</DeleteButton>
     <h3>{{ board.title || "Untitled Retro" }}</h3>
     <div class="columns">
       <div
@@ -16,15 +17,28 @@
 <script setup lang="ts">
 import { Template } from "../templates";
 import BoardData from "../types";
+import DeleteButton from "./DeleteButton.vue";
 
 const { board, isTemplate } = defineProps<{
   board: BoardData | Template;
   isTemplate: boolean;
 }>();
+
+const emit = defineEmits(['delete'])
+
+function onDelete(e: Event) {
+  e.stopPropagation()
+  emit('delete')
+}
 </script>
 
 <style scoped>
+.board:hover button {
+  display: block;
+}
+
 .board {
+  position: relative;
   width: 300px;
   height: 200px;
   border: 2px solid rgba(105, 98, 98, 0.127);
@@ -41,7 +55,7 @@ const { board, isTemplate } = defineProps<{
   padding: 16px;
   font-weight: bold;
   transition: all 0.2s ease-in-out;
-  background-color: #FFF7F6;
+  background-color: #fff7f6;
 }
 
 .board:hover {

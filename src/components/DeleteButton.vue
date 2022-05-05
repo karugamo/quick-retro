@@ -2,7 +2,9 @@
   <button>✖</button>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const {color} = defineProps<{color?: string}>()
+</script>
 
 <style scoped>
 button {
@@ -12,7 +14,11 @@ button {
   cursor: pointer;
   background-color: transparent;
   border: 0;
-  color: white;
+  color: v-bind(color || 'white');
   display: none;
+}
+
+button:hover {
+  transform: scale(1.5);
 }
 </style>

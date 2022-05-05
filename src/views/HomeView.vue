@@ -16,6 +16,7 @@
         <BoardCard
           v-for="(board, boardId) in ownBoards"
           @click="navigateToBoard(boardId as unknown as string)"
+          @delete="onDeleteBoard(boardId as unknown as string)"
           :board="board"
           :is-template="false"
         />
@@ -27,7 +28,7 @@
 <script setup lang="ts">
 import { computed, inject } from "vue";
 import BoardCard from "../components/BoardCard.vue";
-import { addNewBoard, useBoards } from "../database";
+import { addNewBoard, useBoards, leaveBoard } from "../database";
 import { Template, templates } from "../templates";
 import BoardData from "../types";
 
@@ -42,6 +43,10 @@ const user = inject("user") as { uid: string };
 const ownBoards = computed(
   () => useBoards(user.uid) as { [boardId: string]: BoardData }
 );
+
+function onDeleteBoard(boardId: string) {
+  leaveBoard(user.uid, boardId)
+}
 
 async function createNewBoard(template: Template) {
   if (!user?.uid) return;
