@@ -23,6 +23,7 @@ function getToggleText() {
 
 function onTitleKeyPress(e: KeyboardEvent) {
   if (e.key === "Enter") {
+    (e.target as HTMLInputElement).blur();
     e.preventDefault();
   }
 }
