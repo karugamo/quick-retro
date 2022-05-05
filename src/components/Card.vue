@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { inject } from "@vue/runtime-dom";
 import BoardData from "../types";
+import DeleteButton from "./DeleteButton.vue";
 
 const { author } = defineProps<{
   text: string;
@@ -19,23 +20,12 @@ const board = inject("board") as BoardData;
 
 <template>
   <li :class="{ hidden: !isCurrentUser && board?.cardsHidden }">
-    <button @click="onDelete(id)">✖</button>
+    <DeleteButton @click="onDelete(id)">✖</DeleteButton>
     {{ text }}
   </li>
 </template>
 
 <style scoped>
-button {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  cursor: pointer;
-  background-color: transparent;
-  border: 0;
-  color: white;
-  display: none;
-}
-
 li:hover button {
   display: block;
 }
