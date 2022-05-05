@@ -40,6 +40,10 @@ function onTitleFocus() {
 }
 
 const title = ref(board.title || "Untitled Retro");
+
+watch(board, (newBoard) => {
+  title.value = newBoard.title || "Untitled Retro";
+});
 </script>
 
 <template>
