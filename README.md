@@ -28,3 +28,8 @@ Log in with firebase to manage database rules deployments
 ```
 npx firebase login
 ```
+
+Deploy database rule changes
+```
+npm run deploy-db
+```

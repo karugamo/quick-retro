@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, signInAnonymously } from "firebase/auth";
 import {
   connectDatabaseEmulator,
+  DataSnapshot,
   getDatabase,
   onValue,
   push,
@@ -30,14 +31,45 @@ if (import.meta.env.MODE === "test") {
   connectDatabaseEmulator(database, "localhost", 9000);
 }
 
-export function useBoards() {
-  const boards = reactive<any>({});
+const boards = reactive<any>({});
 
-  onValue(ref(database, `boards`), (snapshot) => {
-    Object.entries(snapshot.val()).forEach(([key, value]) => {
-      boards[key] = value;
-    });
-  });
+export function useBoards(userId: string | undefined) {
+  if (!userId) return boards;
+
+  const userBoardsRef = ref(database, `users/${userId}/boards`);
+
+  onValue(userBoardsRef, onUserBoardListChanged, onError);
+
+  const boardListeners: { [boardId: string]: () => void } = {};
+
+  function onUserBoardListChanged(snapshot: DataSnapshot) {
+    const boardIds = Object.values(snapshot.val()) as string[];
+    for (const boardId of boardIds) {
+      if (boardListeners[boardId]) continue;
+
+      const unsubscribe = onValue(
+        ref(database, `boards/${boardId}`),
+        onBoardChanged.bind(null, boardId),
+        onError
+      );
+      boardListeners[boardId] = unsubscribe;
+    }
+
+    for (const boardId in boardListeners) {
+      if (boardIds.includes(boardId)) continue;
+
+      boardListeners[boardId]();
+      delete boardListeners[boardId];
+    }
+  }
+
+  function onBoardChanged(boardId: string, snapshot: DataSnapshot) {
+    boards[boardId] = snapshot.val();
+  }
+
+  function onError(e: Error) {
+    console.error(e);
+  }
 
   return boards;
 }
@@ -45,16 +77,26 @@ export function useBoards() {
 export function useBoard(id: string) {
   const board = reactive<{ [key: string]: any }>({ loading: true });
 
-  onValue(ref(database, `boards/${id}`), (snapshot) => {
-    board.exists = snapshot.exists();
+  onValue(
+    ref(database, `boards/${id}`),
+    (snapshot) => {
+      board.exists = snapshot.exists();
+      board.loading = false;
+
+      if (!board.exists) return;
+
+      Object.entries(snapshot.val()).forEach(([key, value]) => {
+        board[key] = value;
+      });
+    },
+    onError
+  );
+
+  function onError(e: Error) {
+    console.log(e);
+    board.exists = false;
     board.loading = false;
-
-    if (!board.exists) return;
-
-    Object.entries(snapshot.val()).forEach(([key, value]) => {
-      board[key] = value;
-    });
-  });
+  }
 
   return board;
 }
@@ -85,14 +127,18 @@ export function removeCard(boardId: string, columnId: string, cardId: string) {
   );
 }
 
-export async function addNewBoard(author: string, template: Template) {
+export async function addNewBoard(authorId: string, template: Template) {
   const boards = ref(database, "boards");
   const newBoard = await push(boards, {
-    author,
+    author: authorId,
     cardsHidden: true,
     title: "",
     columns: template.columns.map((column) => ({ ...column, cards: {} })),
   });
+
+  const userBoards = ref(database, `users/${authorId}/boards`);
+  await push(userBoards, newBoard.key);
+
   return newBoard.key;
 }
 

@@ -37,12 +37,10 @@ const { navigateToBoard } = defineProps<{
   navigateToBoard: (boardId: string) => void;
 }>();
 
-const boards = useBoards() as { [boardId: string]: BoardData };
 const user = inject("user") as { uid: string };
-const ownBoards = computed(() =>
-  Object.fromEntries(
-    Object.entries(boards).filter(([_, board]) => board.author === user?.uid)
-  )
+
+const ownBoards = computed(
+  () => useBoards(user.uid) as { [boardId: string]: BoardData }
 );
 
 async function createNewBoard(template: Template) {

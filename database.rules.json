@@ -1,6 +1,16 @@
 {
   "rules": {
-    ".read": "now < 1654120800000",
-    ".write": "now < 1654120800000"
+    "users": {
+       "$uid": {
+           ".read": "$uid === auth.uid",
+           ".write": "$uid === auth.uid"
+        }
+     },
+     "boards": {
+        "$boardId": {
+            ".read": true,
+            ".write": true
+         }
+     }
   }
 }
