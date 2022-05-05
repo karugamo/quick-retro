@@ -27,7 +27,7 @@ const { board, isTemplate } = defineProps<{
 .board {
   width: 300px;
   height: 200px;
-  border: 2px solid rgba(47, 43, 43, 0.309);
+  border: 2px solid rgba(105, 98, 98, 0.127);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -41,6 +41,7 @@ const { board, isTemplate } = defineProps<{
   padding: 16px;
   font-weight: bold;
   transition: all 0.2s ease-in-out;
+  background-color: #FFF7F6;
 }
 
 .board:hover {
