@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <main>
-      <h1>🚀 quick retro 🚀</h1>
+      <h1>🚀 quick retro {{ isTesting ? "(emulated)" : "" }}🚀</h1>
       <h2>start a new board</h2>
       <section>
         <BoardCard
@@ -30,6 +30,8 @@ import BoardCard from "../components/BoardCard.vue";
 import { addNewBoard, useBoards } from "../database";
 import { Template, templates } from "../templates";
 import BoardData from "../types";
+
+const isTesting = import.meta.env.MODE === "test";
 
 const { navigateToBoard } = defineProps<{
   navigateToBoard: (boardId: string) => void;
