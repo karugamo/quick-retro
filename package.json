@@ -4,8 +4,10 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
+    "dev-test": "vite --mode test",
     "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "emulate-firebase": "firebase emulators:start"
   },
   "dependencies": {
     "@types/firebase": "^3.2.1",

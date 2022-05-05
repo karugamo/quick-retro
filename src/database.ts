@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, signInAnonymously } from "firebase/auth";
 import {
+  connectDatabaseEmulator,
   getDatabase,
   onValue,
   push,
@@ -25,6 +26,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const database = getDatabase(app);
+if (import.meta.env.MODE === "test") {
+  connectDatabaseEmulator(database, "localhost", 9000);
+}
 
 export function useBoards() {
   const boards = reactive<any>({});
