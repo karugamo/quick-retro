@@ -3,6 +3,7 @@ import { getAuth, onAuthStateChanged, signInAnonymously } from "firebase/auth";
 import {
   connectDatabaseEmulator,
   DataSnapshot,
+  get,
   getDatabase,
   onValue,
   push,
@@ -37,13 +38,14 @@ export function useBoards(userId: string | undefined) {
   if (!userId) return boards;
 
   const userBoardsRef = ref(database, `users/${userId}/boards`);
+  const boardListeners: { [boardId: string]: () => void } = {};
 
   onValue(userBoardsRef, onUserBoardListChanged, onError);
 
-  const boardListeners: { [boardId: string]: () => void } = {};
-
   function onUserBoardListChanged(snapshot: DataSnapshot) {
-    const boardIds = Object.values(snapshot.val()) as string[];
+    const boardIds = (
+      snapshot.exists() ? Object.values(snapshot.val()) : []
+    ) as string[];
     for (const boardId of boardIds) {
       if (boardListeners[boardId]) continue;
 
@@ -136,10 +138,24 @@ export async function addNewBoard(authorId: string, template: Template) {
     columns: template.columns.map((column) => ({ ...column, cards: {} })),
   });
 
-  const userBoards = ref(database, `users/${authorId}/boards`);
-  await push(userBoards, newBoard.key);
+  if (!newBoard.key) return;
+
+  await joinBoard(authorId, newBoard.key);
 
   return newBoard.key;
+}
+
+export async function joinBoard(userId: string, boardId: string) {
+  const userBoardsSnapshot = await get(ref(database, `users/${userId}/boards`));
+
+  const boardIds = (
+    userBoardsSnapshot.exists() ? Object.values(userBoardsSnapshot.val()) : []
+  ) as string[];
+
+  if (boardIds.includes(boardId)) return;
+
+  const userBoards = ref(database, `users/${userId}/boards`);
+  await push(userBoards, boardId);
 }
 
 export function useUser() {

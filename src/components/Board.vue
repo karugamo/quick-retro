@@ -1,12 +1,17 @@
 <script setup lang="ts">
-import { inject, ref } from "vue";
-import { changeBoardTitle, setCardsHidden } from "../database";
+import { inject, ref, watch, watchEffect } from "vue";
+import { changeBoardTitle, joinBoard, setCardsHidden } from "../database";
 import BoardData from "../types";
 import Button from "./Button.vue";
 import Column from "./Column.vue";
 
 const board = inject("board") as BoardData;
 const boardId = inject("boardId") as string;
+const user = inject("user") as { uid: string };
+
+watchEffect(() => {
+  if (user.uid) joinBoard(user.uid, boardId);
+});
 
 function toggleCardsHidden() {
   setCardsHidden(boardId, !board.cardsHidden);
