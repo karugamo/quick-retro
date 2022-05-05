@@ -1,11 +1,11 @@
 <template>
-  <button @click="onClick">
+  <button>
     {{ text }}
   </button>
 </template>
 
 <script setup lang="ts">
-const { text, onClick } = defineProps<{ text: string; onClick: () => void }>();
+const { text } = defineProps<{ text: string }>();
 </script>
 
 <style scoped>

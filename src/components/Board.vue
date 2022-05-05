@@ -69,7 +69,7 @@ watch(board, (newBoard) => {
     </section>
   </div>
   <section class="options">
-    <Button :on-click="toggleCardsHidden" :text="getToggleText()" />
+    <Button @click="toggleCardsHidden" :text="getToggleText()" />
   </section>
 </template>
 
