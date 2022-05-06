@@ -1,6 +1,6 @@
 <template>
   <div class="board" :class="{ template: isTemplate }">
-    <DeleteButton color="black" @click="onDelete">✖</DeleteButton>
+    <DeleteButton v-if="!isTemplate" color="black" @click="onDelete">✖</DeleteButton>
     <h3>{{ board.title || "Untitled Retro" }}</h3>
     <div class="columns">
       <div
