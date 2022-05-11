@@ -11,25 +11,15 @@
         :onDelete="onDelete"
       />
     </ul>
-    <div class="input-container">
-      <Input
-        class="input"
-        v-model:value="state.inputText"
-        type="textarea"
-        autosize
-        placeholder="Add new card"
-        @keydown="onInputKeyUp"
-      />
-      <button class="save-button" @click="addNewCard">save</button>
-    </div>
+    <CardInput :color="color" placeholder="Add new card" @save="addNewCard" />
   </section>
 </template>
 
 <script setup lang="ts">
-import { NInput as Input } from "naive-ui";
-import { inject, reactive } from "vue";
+import { inject } from "vue";
 import { addCard, removeCard } from "../database";
 import Card from "./Card.vue";
+import CardInput from "./CardInput.vue";
 
 const { columnId, boardId } = defineProps<{
   title: string;
@@ -39,32 +29,20 @@ const { columnId, boardId } = defineProps<{
   cards: { [cardId: string]: { text: string; author: string } };
 }>();
 
-const state = reactive({
-  inputText: "",
-});
-
 const user = inject<{ uid: string }>("user");
 
-function addNewCard() {
-  if (state.inputText.trim() === "") return;
+function addNewCard(newText: string) {
+  if (newText.trim() === "") return;
   if (!user?.uid) return;
 
   addCard(boardId, columnId, {
-    text: state.inputText,
+    text: newText,
     author: user.uid,
   });
-  state.inputText = "";
 }
 
 function onDelete(cardId: string) {
   removeCard(boardId, columnId, cardId);
-}
-
-function onInputKeyUp(e: KeyboardEvent) {
-  if (e.metaKey && e.key === "Enter") {
-    e.preventDefault();
-    addNewCard();
-  }
 }
 </script>
 
@@ -83,32 +61,5 @@ ul {
   flex-direction: column;
   gap: 8px;
   margin-bottom: 16px;
-}
-
-.input {
-  padding: 8px;
-  width: 100%;
-  box-sizing: border-box;
-  text-align: left;
-}
-
-.input-container {
-  position: relative;
-}
-
-.save-button {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background-color: v-bind(color);
-  color: white;
-  border: 0;
-  font-weight: 500;
-  border-radius: 4px;
-  margin: 4px;
-  cursor: pointer;
-  padding: 2px 8px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 </style>
