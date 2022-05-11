@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from "@vue/reactivity";
 import { inject, reactive } from "@vue/runtime-dom";
 import { updateCard } from "../database";
 import BoardData from "../types";
@@ -26,6 +27,7 @@ const isCurrentUser = user.uid === author;
 const board = inject("board") as BoardData;
 
 function setIsEditing() {
+  if (!isCurrentUser) return;
   state.isEditing = true;
 }
 
@@ -38,6 +40,8 @@ function onSave(newText: string) {
     text: newText,
   });
 }
+
+const cursor = computed(() => (isCurrentUser ? "text" : "default"));
 </script>
 
 <template>
@@ -71,6 +75,7 @@ li {
   padding: 24px;
   background-color: v-bind(color);
   text-align: left;
+  cursor: v-bind(cursor);
 }
 
 .hidden {
