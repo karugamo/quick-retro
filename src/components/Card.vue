@@ -1,16 +1,18 @@
 <template>
-  <li
+  <div class="card"
     v-if="!state.isEditing"
     draggable="true"
     @dragstart="onDragStart"
+    @dragend="onDragEnd"
     @dragover="onDragOver"
     @click="setIsEditing"
     @drop="onDrop"
+    :style="{ visibility: state.isDragged ? 'hidden' : 'visible' }"
     :class="{ hidden: !isCurrentUser && board?.cardsHidden }"
   >
     <DeleteButton @delete="onDelete(String(id))">✖</DeleteButton>
     {{ props.text }}
-  </li>
+  </div>
   <CardInput
     v-else
     :initial-value="props.text"
@@ -43,6 +45,7 @@ const { author, color, boardId, columnId, id } = props;
 
 const state = reactive({
   isEditing: false,
+  isDragged: false,
 });
 
 const user = inject("user") as { uid: string };
@@ -76,9 +79,15 @@ function onDragStart(e: DragEvent) {
       text: props.text,
     })
   );
+  setTimeout(() => (state.isDragged = true));
+}
+
+function onDragEnd(e: DragEvent) {
+  state.isDragged = false;
 }
 
 function onDragOver(e: DragEvent) {
+  console.log("drag over card");
   e.preventDefault();
 }
 
@@ -97,11 +106,11 @@ const cursor = computed(() => (isCurrentUser ? "text" : "default"));
 </script>
 
 <style scoped>
-li:hover button {
+.card:hover button {
   display: block;
 }
 
-li {
+.card {
   position: relative;
   color: white;
   font-weight: 500;

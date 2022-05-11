@@ -63,7 +63,6 @@ export function useBoards(userId: string | undefined) {
 
       boardListeners[boardId]();
       delete boardListeners[boardId];
-      console.log("delete", boardId);
       delete boards[boardId];
     }
   }
@@ -130,6 +129,26 @@ export function removeCard(boardId: string, columnId: string, cardId: string) {
   remove(
     ref(database, `boards/${boardId}/columns/${columnId}/cards/${cardId}`)
   );
+}
+
+export async function moveCard(
+  boardId: string,
+  columnId: string,
+  cardId: string,
+  newColumnId: string
+) {
+  const card = ref(
+    database,
+    `boards/${boardId}/columns/${columnId}/cards/${cardId}`
+  );
+  const newColumn = ref(
+    database,
+    `boards/${boardId}/columns/${newColumnId}/cards`
+  );
+
+  const cardSnapshot = await get(card);
+  push(newColumn, cardSnapshot.val());
+  remove(card);
 }
 
 export function updateCard(

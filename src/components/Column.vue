@@ -1,27 +1,41 @@
 <template>
   <section>
     <h2>{{ title }}</h2>
+    <div
+      class="card-spacer"
+      @dragover="onDragOverSpacer"
+      @dragleave="onDragLeaveSpacer"
+      @drop="onDropSpacer"
+    ></div>
     <ul>
-      <Card
-        v-for="(card, cardId) in cards"
-        :id="cardId"
-        :key="cardId"
-        :author="card.author"
-        :text="card.text"
-        :color="color"
-        :onDelete="onDelete"
-        :board-id="boardId"
-        :column-id="columnId"
-      />
+      <li v-for="(card, cardId) in cards">
+        <Card
+          :id="cardId"
+          :key="cardId"
+          :author="card.author"
+          :text="card.text"
+          :color="color"
+          :onDelete="onDelete"
+          :board-id="boardId"
+          :column-id="columnId"
+        />
+        <div
+          v-if="Object.keys(cards).length > 0"
+          class="card-spacer"
+          @dragover="onDragOverSpacer"
+          @dragleave="onDragLeaveSpacer"
+          @drop="onDropSpacer"
+        ></div>
+      </li>
     </ul>
-    <div v-if="Object.keys(cards).length > 0" class="spacer" />
+    <div v-if="Object.keys(cards).length > 0" class="spacer"></div>
     <CardInput :color="color" placeholder="Add new card" @save="addNewCard" />
   </section>
 </template>
 
 <script setup lang="ts">
 import { inject } from "vue";
-import { addCard, removeCard } from "../database";
+import { addCard, moveCard, removeCard } from "../database";
 import Card from "./Card.vue";
 import CardInput from "./CardInput.vue";
 
@@ -48,6 +62,24 @@ function addNewCard(newText: string) {
 function onDelete(cardId: string) {
   removeCard(boardId, columnId, cardId);
 }
+
+function onDragOverSpacer(e: DragEvent) {
+  e.preventDefault();
+  if (e.dataTransfer) e.dataTransfer.dropEffect = "move";
+  if (e.target) (e.target as HTMLDivElement).style.height = "64px";
+}
+
+function onDragLeaveSpacer(e: DragEvent) {
+  if (e.target) (e.target as HTMLDivElement).style.height = "8px";
+}
+
+function onDropSpacer(e: DragEvent) {
+  if (e.target) (e.target as HTMLDivElement).style.height = "8px";
+
+  const data = JSON.parse(e.dataTransfer?.getData("application/json") ?? "{}");
+
+  moveCard(boardId, data.columnId, data.cardId, columnId);
+}
 </script>
 
 <style scoped>
@@ -63,10 +95,13 @@ section {
 ul {
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
 .spacer {
   height: 24px;
+}
+
+.card-spacer {
+  height: 8px;
 }
 </style>
