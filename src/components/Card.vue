@@ -112,6 +112,7 @@ li {
   text-align: left;
   cursor: v-bind(cursor);
   white-space: pre-line;
+  margin-bottom: 24px;
 }
 
 .hidden {
