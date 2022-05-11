@@ -10,12 +10,7 @@
         v-for="column in board.columns"
         v-bind:style="{ backgroundColor: column.color }"
         :style="{
-          height: isTemplate
-            ? '100%'
-            : `${Math.min(
-                (Object.keys(column?.cards ?? {}).length + 1) * 20,
-                100
-              )}%`,
+          height: getColumnHeight(column),
         }"
       >
         {{ column.title }}
@@ -25,6 +20,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import { Template } from "../templates";
 import BoardData from "../types";
 import DeleteButton from "./DeleteButton.vue";
@@ -39,6 +35,32 @@ const emit = defineEmits(["delete"]);
 function onDelete(e: Event) {
   e.stopPropagation();
   emit("delete");
+}
+
+const largestColumn = computed(() => {
+  let largestValue = 0;
+  for (const columns of Object.values(board.columns)) {
+    console.log(columns);
+    const numberOfCards = Object.keys(columns.cards ?? {}).length;
+    if (numberOfCards > largestValue) {
+      largestValue = numberOfCards;
+    }
+  }
+  return largestValue;
+});
+
+function getColumnHeight(column: any) {
+  const minHeight = 20;
+
+  if (isTemplate) return "100%";
+  if (largestColumn.value === 0) return `${minHeight}%`;
+
+  const numberOfCardsInColumn = Object.keys(column?.cards ?? {}).length;
+
+  return `${
+    (numberOfCardsInColumn / largestColumn.value) * (100 - minHeight) +
+    minHeight
+  }%`;
 }
 </script>
 
