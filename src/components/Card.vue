@@ -1,3 +1,23 @@
+<template>
+  <li
+    v-if="!state.isEditing"
+    @click="setIsEditing"
+    :class="{ hidden: !isCurrentUser && board?.cardsHidden }"
+  >
+    <DeleteButton @delete="onDelete(String(id))">✖</DeleteButton>
+    {{ text }}
+  </li>
+  <CardInput
+    v-else
+    :initial-value="text"
+    placeholder="Edit card"
+    :color="color"
+    autofocus
+    @blur="setIsNotEditing"
+    @save="onSave"
+  />
+</template>
+
 <script setup lang="ts">
 import { computed } from "@vue/reactivity";
 import { inject, reactive } from "@vue/runtime-dom";
@@ -47,26 +67,6 @@ function onSave(newText: string) {
 
 const cursor = computed(() => (isCurrentUser ? "text" : "default"));
 </script>
-
-<template>
-  <li
-    v-if="!state.isEditing"
-    @click="setIsEditing"
-    :class="{ hidden: !isCurrentUser && board?.cardsHidden }"
-  >
-    <DeleteButton @click="onDelete(String(id))">✖</DeleteButton>
-    {{ text }}
-  </li>
-  <CardInput
-    v-else
-    :initial-value="text"
-    placeholder="Edit card"
-    :color="color"
-    autofocus
-    @blur="setIsNotEditing"
-    @save="onSave"
-  />
-</template>
 
 <style scoped>
 li:hover button {

@@ -1,9 +1,15 @@
 <template>
-  <button>✖</button>
+  <button @click="onClick">✖</button>
 </template>
 
 <script setup lang="ts">
 const {color} = defineProps<{color?: string}>()
+const emit = defineEmits(['delete'])
+
+function onClick(e: Event) {
+  e.stopPropagation()
+  emit('delete')
+}
 </script>
 
 <style scoped>
