@@ -1,12 +1,22 @@
 <template>
   <div class="board" :class="{ template: isTemplate }">
-    <DeleteButton v-if="!isTemplate" color="black" @click="onDelete">✖</DeleteButton>
+    <DeleteButton v-if="!isTemplate" color="black" @click="onDelete"
+      >✖</DeleteButton
+    >
     <h3>{{ board.title || "Untitled Retro" }}</h3>
     <div class="columns">
       <div
         class="column"
         v-for="column in board.columns"
         v-bind:style="{ backgroundColor: column.color }"
+        :style="{
+          height: isTemplate
+            ? '100%'
+            : `${Math.min(
+                (Object.keys(column?.cards ?? {}).length + 1) * 20,
+                100
+              )}%`,
+        }"
       >
         {{ column.title }}
       </div>
@@ -24,11 +34,11 @@ const { board, isTemplate } = defineProps<{
   isTemplate: boolean;
 }>();
 
-const emit = defineEmits(['delete'])
+const emit = defineEmits(["delete"]);
 
 function onDelete(e: Event) {
-  e.stopPropagation()
-  emit('delete')
+  e.stopPropagation();
+  emit("delete");
 }
 </script>
 
@@ -81,6 +91,7 @@ function onDelete(e: Event) {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  box-sizing: border-box;
 }
 
 .template {
