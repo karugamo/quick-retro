@@ -1,15 +1,19 @@
 <template>
   <li
     v-if="!state.isEditing"
+    draggable="true"
+    @dragstart="onDragStart"
+    @dragover="onDragOver"
     @click="setIsEditing"
+    @drop="onDrop"
     :class="{ hidden: !isCurrentUser && board?.cardsHidden }"
   >
     <DeleteButton @delete="onDelete(String(id))">✖</DeleteButton>
-    {{ text }}
+    {{ props.text }}
   </li>
   <CardInput
     v-else
-    :initial-value="text"
+    :initial-value="props.text"
     placeholder="Edit card"
     :color="color"
     autofocus
@@ -21,12 +25,12 @@
 <script setup lang="ts">
 import { computed } from "@vue/reactivity";
 import { inject, reactive } from "@vue/runtime-dom";
-import { updateCard } from "../database";
+import { removeCard, updateCard } from "../database";
 import BoardData from "../types";
 import CardInput from "./CardInput.vue";
 import DeleteButton from "./DeleteButton.vue";
 
-const { author, color, boardId, columnId, id } = defineProps<{
+const props = defineProps<{
   text: string;
   color: string;
   author: string;
@@ -35,6 +39,7 @@ const { author, color, boardId, columnId, id } = defineProps<{
   boardId: string;
   columnId: string;
 }>();
+const { author, color, boardId, columnId, id } = props;
 
 const state = reactive({
   isEditing: false,
@@ -65,6 +70,33 @@ function onSave(newText: string) {
   });
 }
 
+function onDragStart(e: DragEvent) {
+  e.dataTransfer?.setData(
+    "application/json",
+    JSON.stringify({
+      boardId,
+      columnId,
+      cardId: id,
+      text: props.text,
+    })
+  );
+}
+
+function onDragOver(e: DragEvent) {
+  e.preventDefault();
+}
+
+function onDrop(e: DragEvent) {
+  const data = JSON.parse(e.dataTransfer?.getData("application/json") ?? "{}");
+
+  if (data.cardId === id) return;
+
+  updateCard(boardId, columnId, String(id), {
+    text: props.text + "\n\n--------\n\n" + data.text,
+  });
+  removeCard(data.boardId, data.columnId, data.cardId);
+}
+
 const cursor = computed(() => (isCurrentUser ? "text" : "default"));
 </script>
 
@@ -82,6 +114,7 @@ li {
   background-color: v-bind(color);
   text-align: left;
   cursor: v-bind(cursor);
+  white-space: pre-line;
 }
 
 .hidden {
