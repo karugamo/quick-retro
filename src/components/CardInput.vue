@@ -8,7 +8,7 @@
       autosize
       :placeholder="placeholder"
       @keydown="onInputKeyUp"
-      @blur="$emit('blur')"
+      @blur="onBlur"
     />
     <button class="save-button" @click="onSave">save</button>
   </div>
@@ -27,11 +27,13 @@ const {
   placeholder,
   initialValue = "",
   autofocus = false,
+  saveOnBlur = false,
 } = defineProps<{
   color: string;
   placeholder: string;
   initialValue?: string;
   autofocus?: boolean;
+  saveOnBlur?: boolean;
 }>();
 
 const state = reactive({
@@ -40,7 +42,7 @@ const state = reactive({
 
 function onSave() {
   emit("save", state.inputText);
-  state.inputText = "";
+  if (!saveOnBlur) state.inputText = "";
 }
 
 function onInputKeyUp(e: KeyboardEvent) {
@@ -48,6 +50,10 @@ function onInputKeyUp(e: KeyboardEvent) {
     e.preventDefault();
     onSave();
   }
+}
+
+function onBlur() {
+  if (saveOnBlur) onSave();
 }
 
 if (autofocus) {
@@ -59,9 +65,11 @@ if (autofocus) {
 
 <style>
 .input {
-  padding: 8px;
+  padding: 16.5px;
   width: 100%;
   box-sizing: border-box;
+  font-size: 16px;
+  line-height: 24px;
   text-align: left;
 }
 

@@ -17,7 +17,7 @@
     placeholder="Edit card"
     :color="color"
     autofocus
-    @blur="setIsNotEditing"
+    save-on-blur
     @save="onSave"
   />
 </template>
@@ -54,10 +54,6 @@ const board = inject("board") as BoardData;
 function setIsEditing() {
   if (!isCurrentUser) return;
   state.isEditing = true;
-}
-
-function setIsNotEditing() {
-  state.isEditing = false;
 }
 
 function onSave(newText: string) {
@@ -111,6 +107,7 @@ li {
   font-weight: 500;
   border-radius: 4px;
   padding: 24px;
+  line-height: 24px;
   background-color: v-bind(color);
   text-align: left;
   cursor: v-bind(cursor);
