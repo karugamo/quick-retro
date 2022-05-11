@@ -5,6 +5,7 @@
       <Card
         v-for="(card, cardId) in cards"
         :id="cardId"
+        :key="cardId"
         :author="card.author"
         :text="card.text"
         :color="color"
