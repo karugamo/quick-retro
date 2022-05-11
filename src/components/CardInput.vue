@@ -8,6 +8,7 @@
       autosize
       :placeholder="placeholder"
       @keydown="onInputKeyUp"
+      @blur="$emit('blur')"
     />
     <button class="save-button" @click="onSave">save</button>
   </div>
@@ -17,7 +18,7 @@
 import { NInput as Input } from "naive-ui";
 import { onMounted, reactive, ref } from "vue";
 
-const emit = defineEmits(["save"]);
+const emit = defineEmits(["save", "blur"]);
 
 const inputRef = ref();
 

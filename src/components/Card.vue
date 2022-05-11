@@ -31,6 +31,10 @@ function setIsEditing() {
   state.isEditing = true;
 }
 
+function setIsNotEditing() {
+  state.isEditing = false;
+}
+
 function onSave(newText: string) {
   if (!user?.uid) return;
 
@@ -59,6 +63,7 @@ const cursor = computed(() => (isCurrentUser ? "text" : "default"));
     placeholder="Edit card"
     :color="color"
     autofocus
+    @blur="setIsNotEditing"
     @save="onSave"
   />
 </template>
