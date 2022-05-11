@@ -1,4 +1,29 @@
+<template>
+  <section>
+    <h2>{{ title }}</h2>
+    <ul>
+      <Card
+        v-for="(card, cardId) in cards"
+        :id="cardId"
+        :author="card.author"
+        :text="card.text"
+        :color="color"
+        :onDelete="onDelete"
+      />
+    </ul>
+    <Input
+      class="input"
+      v-model:value="state.inputText"
+      type="textarea"
+      autosize
+      placeholder="Add new card"
+      @keydown="onInputKeyUp"
+    />
+  </section>
+</template>
+
 <script setup lang="ts">
+import { NInput as Input } from "naive-ui";
 import { inject, reactive } from "vue";
 import { addCard, removeCard } from "../database";
 import Card from "./Card.vue";
@@ -17,8 +42,7 @@ const state = reactive({
 
 const user = inject<{ uid: string }>("user");
 
-function onAdd(e: Event) {
-  e.preventDefault();
+function addNewCard() {
   if (state.inputText.trim() === "") return;
   if (!user?.uid) return;
 
@@ -32,26 +56,14 @@ function onAdd(e: Event) {
 function onDelete(cardId: string) {
   removeCard(boardId, columnId, cardId);
 }
-</script>
 
-<template>
-  <section>
-    <h2>{{ title }}</h2>
-    <ul>
-      <Card
-        v-for="(card, cardId) in cards"
-        :id="cardId as string"
-        :author="card.author"
-        :text="card.text"
-        :color="color"
-        :onDelete="onDelete"
-      />
-    </ul>
-    <form target="#" @submit="onAdd">
-      <input placeholder="Add new card" v-model="state.inputText" />
-    </form>
-  </section>
-</template>
+function onInputKeyUp(e: KeyboardEvent) {
+  if (e.metaKey && e.key === "Enter") {
+    e.preventDefault();
+    addNewCard();
+  }
+}
+</script>
 
 <style scoped>
 h2 {
@@ -70,16 +82,10 @@ ul {
   margin-bottom: 16px;
 }
 
-form {
-  width: 100%;
-}
-
-input {
-  border: 2px solid v-bind(color);
-  border-radius: 4px;
+.input {
   padding: 8px;
   width: 100%;
   box-sizing: border-box;
-  font-weight: 500;
+  text-align: left;
 }
 </style>

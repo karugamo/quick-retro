@@ -8,7 +8,7 @@ const { author } = defineProps<{
   color: string;
   author: string;
   onDelete: (cardId: string) => void;
-  id: string;
+  id: string | number;
 }>();
 
 const user = inject("user") as { uid: string };
@@ -20,7 +20,7 @@ const board = inject("board") as BoardData;
 
 <template>
   <li :class="{ hidden: !isCurrentUser && board?.cardsHidden }">
-    <DeleteButton @click="onDelete(id)">✖</DeleteButton>
+    <DeleteButton @click="onDelete(String(id))">✖</DeleteButton>
     {{ text }}
   </li>
 </template>
