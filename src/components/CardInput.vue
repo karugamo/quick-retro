@@ -13,15 +13,23 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
 import { NInput as Input } from "naive-ui";
+import { reactive } from "vue";
 
 const emit = defineEmits(["save"]);
 
-const {color, placeholder} = defineProps<{color: string, placeholder: string}>();
+const {
+  color,
+  placeholder,
+  initialValue = "",
+} = defineProps<{
+  color: string;
+  placeholder: string;
+  initialValue?: string;
+}>();
 
 const state = reactive({
-  inputText: "",
+  inputText: initialValue,
 });
 
 function onSave() {

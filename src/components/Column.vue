@@ -9,6 +9,8 @@
         :text="card.text"
         :color="color"
         :onDelete="onDelete"
+        :board-id="boardId"
+        :column-id="columnId"
       />
     </ul>
     <CardInput :color="color" placeholder="Add new card" @save="addNewCard" />

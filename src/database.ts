@@ -4,12 +4,12 @@ import {
   connectDatabaseEmulator,
   DataSnapshot,
   get,
-  set,
   getDatabase,
   onValue,
   push,
   ref,
   remove,
+  set,
   update,
 } from "firebase/database";
 import { reactive } from "vue";
@@ -63,7 +63,7 @@ export function useBoards(userId: string | undefined) {
 
       boardListeners[boardId]();
       delete boardListeners[boardId];
-      console.log('delete', boardId)
+      console.log("delete", boardId);
       delete boards[boardId];
     }
   }
@@ -132,6 +132,18 @@ export function removeCard(boardId: string, columnId: string, cardId: string) {
   );
 }
 
+export function updateCard(
+  boardId: string,
+  columnId: string,
+  cardId: string,
+  card: Partial<CardDb>
+) {
+  update(
+    ref(database, `boards/${boardId}/columns/${columnId}/cards/${cardId}`),
+    card
+  );
+}
+
 export async function addNewBoard(authorId: string, template: Template) {
   const boards = ref(database, "boards");
   const newBoard = await push(boards, {
@@ -152,9 +164,13 @@ export async function leaveBoard(userId: string, boardId: string) {
   const userBoards = ref(database, `users/${userId}/boards`);
   const userBoardsSnapshot = await get(userBoards);
 
-  if (!userBoardsSnapshot.exists()) return
+  if (!userBoardsSnapshot.exists()) return;
 
-  const boardsWithoutLeavingBoard = Object.fromEntries(Object.entries(userBoardsSnapshot.val()).filter(([key, aBoardId]) => boardId !== aBoardId))
+  const boardsWithoutLeavingBoard = Object.fromEntries(
+    Object.entries(userBoardsSnapshot.val()).filter(
+      ([key, aBoardId]) => boardId !== aBoardId
+    )
+  );
 
   await set(userBoards, boardsWithoutLeavingBoard);
 }
