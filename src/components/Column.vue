@@ -11,14 +11,17 @@
         :onDelete="onDelete"
       />
     </ul>
-    <Input
-      class="input"
-      v-model:value="state.inputText"
-      type="textarea"
-      autosize
-      placeholder="Add new card"
-      @keydown="onInputKeyUp"
-    />
+    <div class="input-container">
+      <Input
+        class="input"
+        v-model:value="state.inputText"
+        type="textarea"
+        autosize
+        placeholder="Add new card"
+        @keydown="onInputKeyUp"
+      />
+      <button class="save-button" @click="addNewCard">save</button>
+    </div>
   </section>
 </template>
 
@@ -87,5 +90,25 @@ ul {
   width: 100%;
   box-sizing: border-box;
   text-align: left;
+}
+
+.input-container {
+  position: relative;
+}
+
+.save-button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: v-bind(color);
+  color: white;
+  border: 0;
+  font-weight: 500;
+  border-radius: 4px;
+  margin: 4px;
+  cursor: pointer;
+  padding: 2px 8px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 </style>
