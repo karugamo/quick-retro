@@ -2,6 +2,7 @@
   <div class="input-container">
     <Input
       class="input"
+      ref="inputRef"
       v-model:value="state.inputText"
       type="textarea"
       autosize
@@ -14,18 +15,22 @@
 
 <script setup lang="ts">
 import { NInput as Input } from "naive-ui";
-import { reactive } from "vue";
+import { onMounted, reactive, ref } from "vue";
 
 const emit = defineEmits(["save"]);
+
+const inputRef = ref();
 
 const {
   color,
   placeholder,
   initialValue = "",
+  autofocus = false,
 } = defineProps<{
   color: string;
   placeholder: string;
   initialValue?: string;
+  autofocus?: boolean;
 }>();
 
 const state = reactive({
@@ -42,6 +47,12 @@ function onInputKeyUp(e: KeyboardEvent) {
     e.preventDefault();
     onSave();
   }
+}
+
+if (autofocus) {
+  onMounted(() => {
+    inputRef.value.focus?.();
+  });
 }
 </script>
 

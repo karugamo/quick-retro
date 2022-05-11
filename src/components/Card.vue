@@ -58,6 +58,7 @@ const cursor = computed(() => (isCurrentUser ? "text" : "default"));
     :initial-value="text"
     placeholder="Edit card"
     :color="color"
+    autofocus
     @save="onSave"
   />
 </template>
