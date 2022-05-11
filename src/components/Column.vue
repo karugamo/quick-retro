@@ -14,6 +14,7 @@
         :column-id="columnId"
       />
     </ul>
+    <div v-if="Object.keys(cards).length > 0" class="spacer" />
     <CardInput :color="color" placeholder="Add new card" @save="addNewCard" />
   </section>
 </template>
@@ -63,5 +64,9 @@ ul {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.spacer {
+  height: 24px;
 }
 </style>
