@@ -8,9 +8,12 @@
       autosize
       :placeholder="placeholder"
       @keydown="onInputKeyUp"
+      @focus="onFocus"
       @blur="onBlur"
     />
-    <button class="save-button" @click="onSave">save</button>
+    <button v-if="state.isFocused" class="save-button" @click="onSave">
+      save
+    </button>
   </div>
 </template>
 
@@ -38,6 +41,7 @@ const {
 
 const state = reactive({
   inputText: initialValue,
+  isFocused: false,
 });
 
 function onSave() {
@@ -53,7 +57,12 @@ function onInputKeyUp(e: KeyboardEvent) {
 }
 
 function onBlur() {
+  state.isFocused = false;
   if (saveOnBlur) onSave();
+}
+
+function onFocus() {
+  state.isFocused = true;
 }
 
 if (autofocus) {
