@@ -103,6 +103,6 @@ input {
 .options {
   position: absolute;
   right: 32px;
-  bottom: 32px;
+  top: 32px;
 }
 </style>
